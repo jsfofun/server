@@ -22,8 +22,8 @@ app.use(cookieParser());
 
 const server = http.createServer(app);
 
-app.use("/api", UsersModule);
-app.use("/api", SavesModule);
+app.use("/api/user", UsersModule);
+app.use("/api/save", SavesModule);
 
 const listener = server.listen(ENV.PORT, () => {
   const address = listener.address();
