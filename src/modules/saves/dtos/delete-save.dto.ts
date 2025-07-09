@@ -1,9 +1,9 @@
 import { Type } from "@sinclair/typebox";
 
 export const DeleteOneSaveDto = Type.Object({
-  service: Type.String({
+  website: Type.String({
     minLength: 3,
-    maxLength: 31,
+    format: "uri",
   }),
 });
 

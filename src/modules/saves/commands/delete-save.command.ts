@@ -6,6 +6,6 @@ export default async function SavesDeleteOneCommand(user: User, body: DeleteOneS
   return await db
     .deleteFrom("saves")
     .where("saves.user_id", "=", user.id)
-    .where("saves.service", "=", body.service)
+    .where("saves.website", "=", body.website)
     .executeTakeFirstOrThrow();
 }

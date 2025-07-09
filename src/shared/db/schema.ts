@@ -21,12 +21,11 @@ export const saves = pgTable(
     user_id: bigserial({ mode: "bigint" })
       .notNull()
       .references(() => users.id),
-    service: text().notNull(),
     website: text().notNull(),
     login_hash: text().notNull(),
     password_hash: text().notNull(),
   },
-  (cb) => [unique("saves_user_id_service_uk").on(cb.user_id, cb.service)]
+  (cb) => [unique("saves_user_id_service_uk").on(cb.user_id, cb.website)]
 );
 
 export type Session = typeof session.$inferSelect;

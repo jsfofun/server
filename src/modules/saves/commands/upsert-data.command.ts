@@ -17,14 +17,12 @@ export default async function UpsertSavesCommand(body: UpsertSaveBody, user: Use
       login_hash: body.login_hash,
       password_hash: body.password_hash,
       website: body.website,
-      service: body.service,
       user_id: user.id,
     })
     .onConflict((cb) =>
-      cb.columns(["service", "user_id"]).doUpdateSet((eb) => ({
+      cb.columns(["website", "user_id"]).doUpdateSet((eb) => ({
         login_hash: eb.ref("excluded.login_hash"),
         password_hash: eb.ref("excluded.password_hash"),
-        website: eb.ref("excluded.website"),
       }))
     )
     .returningAll()
