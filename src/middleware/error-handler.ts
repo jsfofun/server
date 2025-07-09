@@ -2,7 +2,7 @@ import { APIError } from "$/shared/utils/fail";
 import { TypeBoxError } from "@sinclair/typebox";
 import type { ErrorRequestHandler, Response } from "express";
 
-export const errorAsResponse = (res: Response, error: unknown) => {
+export const ParseErrorAsResponse = (res: Response, error: unknown) => {
   // Verification errors
   if (error instanceof TypeBoxError) res.send(error);
   // else if (error instanceof MulterError) {
@@ -25,6 +25,6 @@ export const errorAsResponse = (res: Response, error: unknown) => {
   }
 };
 
-export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-  errorAsResponse(res, err);
+export const ExpressErrorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  ParseErrorAsResponse(res, err);
 };

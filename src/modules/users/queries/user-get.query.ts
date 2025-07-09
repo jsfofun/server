@@ -1,17 +1,12 @@
 import { db } from "$/shared/db";
-import { hash } from "@node-rs/argon2";
-import { SelectUserBody } from "../dtos/login.dto";
+import { SelectUserBody } from "../dtos/select-user.dto";
+import PasswordManager from "../services/passwords";
 
 export async function UserGetQuery(body: SelectUserBody) {
   let password_hash: string | null = null;
 
   if (body.password) {
-    password_hash = await hash(body.password, {
-      memoryCost: 19456,
-      timeCost: 2,
-      outputLen: 32,
-      parallelism: 1,
-    });
+    password_hash = await PasswordManager.hash(body.password);
   }
 
   return db

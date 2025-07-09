@@ -1,11 +1,12 @@
 import { type TSchema, type Static, type SchemaOptions } from "@sinclair/typebox";
 import { Value } from "@sinclair/typebox/value";
 import type { Request, Response } from "express";
-import { errorAsResponse } from "./error-handler";
+import { ParseErrorAsResponse } from "./error-handler";
 import * as table from "$/shared/db/schema";
 import fail from "$/shared/utils/fail";
 export const sessionCookieName = "auth-session";
 import UserSessionAuth from "$/modules/users/services/auth";
+import { APIRedirect } from "$/shared/utils/redirect";
 
 export const verifySchemaData = <T extends TSchema>(schema: T, options?: SchemaOptions) => {
   return Value.Parse<T>(schema, options);
@@ -61,7 +62,7 @@ const UseRoute = function <
     Params,
     UserAuthRequired extends true ? table.User : undefined | table.User
   >,
-  options: {
+  options?: {
     /** Body Schema */
     body?: Body;
 
@@ -84,7 +85,7 @@ const UseRoute = function <
     query: querySchema,
     params: paramsSchema,
     response: responseSchema,
-  } = options;
+  } = options ?? {};
 
   return async (req: Request, res: Response) => {
     try {
@@ -118,11 +119,12 @@ const UseRoute = function <
       res.status(status);
 
       // If response schema type in the options - parse callback value
-      if (responseSchema) res.send(verifySchemaData(responseSchema, response));
+      if (response instanceof APIRedirect) res.redirect(response.url);
+      else if (responseSchema) res.send(verifySchemaData(responseSchema, response));
       // Otherwise just return
       else res.send(response);
     } catch (err) {
-      errorAsResponse(res, err);
+      ParseErrorAsResponse(res, err);
     }
   };
 };

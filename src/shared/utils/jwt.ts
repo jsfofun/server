@@ -32,8 +32,6 @@ export const Bearer = {
     const decoded = Bearer.decode(token);
 
     if (type === "user") {
-      // get and update last online
-      // const user = await $set_user_online(decoded.user_id).catch(() => null);
       const user = await UserGetQuery({ username: decoded.username }).catch(() => null);
       if (!user) fail(401, "Unauthorized!");
 

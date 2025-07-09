@@ -6,5 +6,7 @@ export interface Database {
   users: Omit<table.User, "id"> & {
     id: Generated<bigint>;
   };
-  password: table.Password;
+  saves: Omit<table.Saves, "id"> & {
+    id: Generated<bigint>;
+  };
 }

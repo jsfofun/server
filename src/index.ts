@@ -1,11 +1,12 @@
 import "./shared/utils/logger";
+import { ENV } from "./env";
 
 import express from "express";
 import cookieParser from "cookie-parser";
 import http from "http";
 
-import { ENV } from "./env";
 import { UsersModule } from "./modules/users/users.module";
+import { SavesModule } from "./modules/saves/saves.module";
 
 // export const redis = createClient({
 //   url: `redis://default:${ENV.REDIS_PASSWORD}@localhost:6379`,
@@ -22,6 +23,7 @@ app.use(cookieParser());
 const server = http.createServer(app);
 
 app.use("/api", UsersModule);
+app.use("/api", SavesModule);
 
 const listener = server.listen(ENV.PORT, () => {
   const address = listener.address();

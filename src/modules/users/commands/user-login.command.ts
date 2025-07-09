@@ -1,4 +1,3 @@
-import { verify } from "@node-rs/argon2";
 import fail from "../../../shared/utils/fail";
 import { db } from "$/shared/db";
 import UserSessionAuth from "../services/auth";
@@ -16,15 +15,16 @@ export default async function UserLoginCommand(res: Response, body: UsersLoginBo
     return fail(400, "Invalid password (min 6, max 255 characters)");
   }
 
-  const user = await db
+  const result = await db
     .selectFrom("users")
     .where("users.username", "=", body.username)
     .selectAll()
     .executeTakeFirst();
 
-  if (!user) return fail(400, "Incorrect username or password");
+  if (!result) return fail(400, "Incorrect username or password");
+  const { password_hash, ...user } = result;
 
-  const validPassword = await PasswordManager.verify(user.password_hash, body.password);
+  const validPassword = await PasswordManager.verify(password_hash, body.password);
 
   if (!validPassword) return fail(400, "Incorrect username or password");
 

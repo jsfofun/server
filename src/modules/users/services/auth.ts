@@ -1,6 +1,6 @@
 import { sha256 } from "@oslojs/crypto/sha2";
 import { encodeBase64url, encodeHexLowerCase } from "@oslojs/encoding";
-import type { Request, Response } from "express";
+import type { Response } from "express";
 import * as table from "$/shared/db/schema";
 import { db } from "$/shared/db";
 
@@ -37,6 +37,7 @@ async function validateSessionToken(token: string) {
     .execute();
 
   if (!result) return { session: null, user: null };
+
   const { session, user } = result;
 
   if (session) {
@@ -49,8 +50,11 @@ async function validateSessionToken(token: string) {
     const renewSession = Date.now() >= expires_at.getTime() - DAY_IN_MS * 15;
     if (renewSession) {
       session.expires_at = new Date(Date.now() + DAY_IN_MS * 30);
-      await db.updateTable("session").set({ expires_at: expires_at }).execute();
-      // .where(eq(session.id, session.id));
+      await db
+        .updateTable("session")
+        .set({ expires_at: expires_at })
+        .where("id", "=", session.id)
+        .execute();
     }
   }
   return { session, user };

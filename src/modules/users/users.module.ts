@@ -23,7 +23,12 @@ UsersModule.post(
   })
 );
 
-UsersModule.post(
+UsersModule.delete(
   "/logout",
-  UseRoute(({ response }) => UserLogoutCommand(response), {})
+  UseRoute(({ response }) => UserLogoutCommand(response))
+);
+
+UsersModule.delete(
+  "/logout",
+  UseRoute(({ user }) => user)
 );
