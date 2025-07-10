@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, bigserial, unique } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, bigserial, unique, json } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: bigserial({ mode: "bigint" }).primaryKey(),
@@ -22,10 +22,10 @@ export const saves = pgTable(
       .notNull()
       .references(() => users.id),
     website: text().notNull(),
-    login_hash: text().notNull(),
-    password_hash: text().notNull(),
+    hash_data: text().notNull(),
+    fields: json().notNull().$type<{ password: string; [x: string]: string }>(),
   },
-  (cb) => [unique("saves_user_id_service_uk").on(cb.user_id, cb.website)]
+  (cb) => [unique("saves_user_id_service_uk").on(cb.user_id, cb.website, cb.hash_data)]
 );
 
 export type Session = typeof session.$inferSelect;
