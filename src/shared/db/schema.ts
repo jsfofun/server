@@ -11,6 +11,8 @@ export const session = pgTable("session", {
   user_id: bigserial({ mode: "bigint" })
     .notNull()
     .references(() => users.id),
+  public_key: text().notNull(),
+  device_info: text().notNull(),
   expires_at: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
 });
 
@@ -22,6 +24,8 @@ export const saves = pgTable(
       .notNull()
       .references(() => users.id),
     website: text().notNull(),
+    form_id: text().notNull(),
+    form_classname: text().notNull(),
     hash_data: text().notNull(),
     fields: json().notNull().$type<{ password: string; [x: string]: string }>(),
   },

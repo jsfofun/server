@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UsersLoginDto } from "./dtos/login.dto";
+import { UsersLoginDto } from "@autopass/schemas";
 import UseRoute from "$/middleware/wrapper";
 import UserLoginCommand from "./commands/user-login.command";
 import UserLogoutCommand from "./commands/user-logout.command";

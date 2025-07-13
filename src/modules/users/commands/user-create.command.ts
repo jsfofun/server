@@ -1,7 +1,7 @@
 import fail from "../../../shared/utils/fail";
 import { db } from "$/shared/db";
+import { UsersLoginBody } from "@autopass/schemas";
 import type { Response } from "express";
-import { UsersLoginBody } from "../dtos/login.dto";
 import UserValidateUsernameCommand from "./user-validate-username.command";
 import UserValidatePasswordCommand from "./user-validate-password.command";
 import UserSessionAuth from "../services/auth";

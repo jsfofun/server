@@ -90,7 +90,11 @@ const UseRoute = function <
   return async (req: Request, res: Response) => {
     try {
       const sessionToken = req.cookies[sessionCookieName];
-      const { session, user } = await UserSessionAuth.validateSessionToken(sessionToken);
+      const result = await UserSessionAuth.validateSessionToken(sessionToken);
+
+      if (authRequired && !result) fail(401, "Unauthorized!");
+
+      const { session, user } = result ?? {};
 
       // Update users token after successfully check
       if (session) UserSessionAuth.setSessionTokenCookie(res, sessionToken, session.expires_at);

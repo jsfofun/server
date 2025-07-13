@@ -1,6 +1,6 @@
 import { db } from "$/shared/db";
 import { User } from "$/shared/db/schema";
-import { DeleteOneSaveBody } from "../dtos/delete-save.dto";
+import { DeleteOneSaveBody } from "@autopass/schemas";
 
 export default async function SavesDeleteOneCommand(user: User, body: DeleteOneSaveBody) {
   return await db

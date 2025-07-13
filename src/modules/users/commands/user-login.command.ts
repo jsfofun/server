@@ -2,7 +2,7 @@ import fail from "../../../shared/utils/fail";
 import { db } from "$/shared/db";
 import UserSessionAuth from "../services/auth";
 import type { Response } from "express";
-import { UsersLoginBody } from "../dtos/login.dto";
+import { UsersLoginBody } from "@autopass/schemas";
 import UserValidateUsernameCommand from "./user-validate-username.command";
 import PasswordManager from "../services/passwords";
 import UserValidatePasswordCommand from "./user-validate-password.command";

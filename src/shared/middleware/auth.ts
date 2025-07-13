@@ -9,7 +9,6 @@ export const AuthMiddleware = async (req: Request, res: Response, next: NextFunc
   const profile = await Bearer.verify(bearer);
 
   if (!profile) return next(new APIError(401, "Unauthorized"));
-
   const user = await UserGetQuery({ username: profile.user.username });
   if (!user) return next(new APIError(401, "Unauthorized"));
   res.locals["user"] = user;

@@ -1,5 +1,5 @@
 import { db } from "$/shared/db";
-import { SelectUserBody } from "../dtos/select-user.dto";
+import { SelectUserBody } from "@autopass/schemas";
 import PasswordManager from "../services/passwords";
 
 export async function UserGetQuery(body: SelectUserBody) {

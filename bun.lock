@@ -4,6 +4,7 @@
     "": {
       "name": "server",
       "dependencies": {
+        "@autopass/schemas": "link:@autopass/schemas",
         "@node-rs/argon2": "^2.0.2",
         "@oslojs/crypto": "^1.0.1",
         "@oslojs/encoding": "^1.1.0",
@@ -40,6 +41,8 @@
     },
   },
   "packages": {
+    "@autopass/schemas": ["@autopass/schemas@link:@autopass/schemas", {}],
+
     "@drizzle-team/brocli": ["@drizzle-team/brocli@0.10.2", "", {}, "sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w=="],
 
     "@emnapi/core": ["@emnapi/core@1.4.3", "", { "dependencies": { "@emnapi/wasi-threads": "1.0.2", "tslib": "^2.4.0" } }, "sha512-4m62DuCE07lw01soJwPiBGC0nAww0Q+RY70VZ+n49yDIO13yyinhbWCeNnaob0lakDtWQzSdtNWzJeOJt2ma+g=="],

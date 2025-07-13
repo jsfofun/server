@@ -36,7 +36,7 @@ async function validateSessionToken(token: string) {
     .select((cb) => [cb.fn.toJson("session").as("session"), cb.fn.toJson("users").as("user")])
     .execute();
 
-  if (!result) return { session: null, user: null };
+  if (!result) return null;
 
   const { session, user } = result;
 
@@ -45,7 +45,7 @@ async function validateSessionToken(token: string) {
     const sessionExpired = Date.now() >= expires_at.getTime();
     if (sessionExpired) {
       await db.deleteFrom("session").where("session.id", "=", session.id).execute();
-      return { session: null, user: null };
+      return null;
     }
     const renewSession = Date.now() >= expires_at.getTime() - DAY_IN_MS * 15;
     if (renewSession) {

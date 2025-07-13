@@ -1,4 +1,3 @@
-// import * as table from "$/shared/db/schema";
 import { Type } from "@sinclair/typebox";
 
 export const UsersLoginDto = Type.Object({

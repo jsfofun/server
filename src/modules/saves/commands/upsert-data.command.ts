@@ -1,5 +1,5 @@
 // import fail from "../../../shared/utils/fail";
-import { UpsertSaveBody } from "../dtos/upsert-save.dto";
+import { UpsertSaveBody } from "@autopass/schemas";
 // import PasswordManager from "../services/passwords";
 import { User } from "$/shared/db/schema";
 import { db } from "$/shared/db";
@@ -23,6 +23,8 @@ export default async function UpsertSavesCommand(body: UpsertSaveBody, user: Use
         password: body.fields["password"],
       }),
       hash_data: body.hash_data,
+      form_classname: body.form_classname,
+      form_id: body.form_id,
       website: body.website,
       user_id: user.id,
     })
