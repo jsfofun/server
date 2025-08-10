@@ -28,7 +28,7 @@ UsersModule.delete(
   UseRoute(({ response }) => UserLogoutCommand(response))
 );
 
-UsersModule.delete(
-  "/logout",
-  UseRoute(({ user }) => user)
+UsersModule.get(
+  "/profile",
+  UseRoute(({ user: { password_hash, ...data } }) => data)
 );
