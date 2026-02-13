@@ -1,27 +1,30 @@
-// import fail from "../../../shared/utils/fail";
+import fail from "$/shared/utils/fail";
 import { UpsertSaveBody } from "@autopass/schemas";
-// import PasswordManager from "../services/passwords";
 import { User } from "$/shared/db/schema";
 import { db } from "$/shared/db";
 import { RawBuilder, sql } from "kysely";
+import * as encryption from "$/shared/utils/encryption";
 
 function json<T>(value: T): RawBuilder<T> {
   return sql`CAST(${JSON.stringify(value)} AS JSONB)`;
 }
-export default async function UpsertSavesCommand(body: UpsertSaveBody, user: User) {
-  // const password_hash = await PasswordManager.hash(body.password_hash);
-  // if (!password_hash) return fail(500, "Unavailable to hash password");
 
-  // const login_hash = await PasswordManager.hash(body.login_hash);
-  // if (!login_hash) return fail(500, "Unavailable to hash login");
+/**
+ * Сохраняет save. Требует клиентское шифрование (_encrypted).
+ * Применяет дополнительное AES-256-GCM шифрование на сервере для хранения.
+ */
+export default async function UpsertSavesCommand(body: UpsertSaveBody, user: User) {
+  if (!("_encrypted" in body.fields)) {
+    fail(400, "Sensitive data must be encrypted by client. Send fields with _encrypted key.");
+  }
+
+  const ciphertext = encryption.encrypt(JSON.stringify(body.fields), user.id);
+  const fieldsToStore = { _ciphertext: ciphertext };
 
   return await db
     .insertInto("saves")
     .values({
-      fields: json({
-        ...body.fields,
-        password: body.fields["password"],
-      }),
+      fields: json(fieldsToStore),
       hash_data: body.hash_data,
       form_classname: body.form_classname,
       form_id: body.form_id,

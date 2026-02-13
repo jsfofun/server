@@ -23,12 +23,16 @@ UsersModule.post(
   })
 );
 
-UsersModule.delete(
-  "/logout",
-  UseRoute(({ response }) => UserLogoutCommand(response))
+// PUT для совместимости с browser extension
+UsersModule.put(
+  "/login",
+  UseRoute(({ body, response }) => UserLoginCommand(response, body), {
+    body: UsersLoginDto,
+    authRequired: false,
+  })
 );
 
 UsersModule.delete(
   "/logout",
-  UseRoute(({ user }) => user)
+  UseRoute(({ response }) => UserLogoutCommand(response))
 );
