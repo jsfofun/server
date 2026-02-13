@@ -14,13 +14,20 @@ function generateSessionToken() {
   return token;
 }
 
-async function createSession(token: string, user_id: bigint) {
+async function createSession(
+  token: string,
+  user_id: bigint,
+  device_info: string,
+  public_key: string
+) {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 
   const session: table.Session = {
     id: sessionId,
     user_id,
     expires_at: new Date(Date.now() + DAY_IN_MS * 30),
+    device_info,
+    public_key,
   };
 
   await db.insertInto("session").values(session).execute();

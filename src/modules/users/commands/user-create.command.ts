@@ -24,7 +24,12 @@ export default async function UserRegisterCommand(res: Response, body: UsersLogi
   const { password_hash: password_res, ...user } = result;
 
   const sessionToken = UserSessionAuth.generateSessionToken();
-  const session = await UserSessionAuth.createSession(sessionToken, user.id);
+  const session = await UserSessionAuth.createSession(
+    sessionToken,
+    user.id,
+    body.device_info,
+    body.public_key
+  );
   UserSessionAuth.setSessionTokenCookie(res, sessionToken, session.expires_at);
   return user;
 }

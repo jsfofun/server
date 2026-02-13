@@ -29,7 +29,12 @@ export default async function UserLoginCommand(res: Response, body: UsersLoginBo
   if (!validPassword) return fail(400, "Incorrect username or password");
 
   const sessionToken = UserSessionAuth.generateSessionToken();
-  const session = await UserSessionAuth.createSession(sessionToken, user.id);
+  const session = await UserSessionAuth.createSession(
+    sessionToken,
+    user.id,
+    body.device_info,
+    body.public_key
+  );
   UserSessionAuth.setSessionTokenCookie(res, sessionToken, session.expires_at);
 
   return user;
