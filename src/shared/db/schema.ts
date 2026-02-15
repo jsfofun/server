@@ -36,9 +36,10 @@ export const saves = pgTable(
     form_id: text().notNull(),
     form_classname: text().notNull(),
     hash_data: text().notNull(),
-    fields: json().notNull().$type<{ password: string; [x: string]: string }>(),
+    fields: json().notNull().$type<{ _encrypted: string; [x: string]: string }>(),
+    // .$type<{ password: string; [x: string]: string }>()
   },
-  (cb) => [unique("saves_user_id_service_uk").on(cb.user_id, cb.website, cb.hash_data)]
+  (cb) => [unique("saves_user_id_service_uk").on(cb.user_id, cb.website, cb.hash_data)],
 );
 
 export type Session = typeof session.$inferSelect;
