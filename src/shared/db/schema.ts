@@ -1,9 +1,18 @@
-import { pgTable, text, timestamp, bigserial, unique, json } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, bigserial, bigint, unique, json } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: bigserial({ mode: "bigint" }).primaryKey(),
   username: text("username").notNull().unique(),
   password_hash: text("password_hash").notNull(),
+});
+
+/** Zero-knowledge vault: salt and encrypted DEK. Server cannot decrypt. */
+export const user_vault = pgTable("user_vault", {
+  user_id: bigint("user_id", { mode: "bigint" })
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  salt: text("salt").notNull(),
+  encrypted_dek: text("encrypted_dek").notNull(),
 });
 
 export const session = pgTable("session", {
@@ -35,5 +44,7 @@ export const saves = pgTable(
 export type Session = typeof session.$inferSelect;
 
 export type User = typeof users.$inferSelect;
+
+export type UserVault = typeof user_vault.$inferSelect;
 
 export type Saves = typeof saves.$inferSelect;

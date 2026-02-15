@@ -17,12 +17,14 @@ export default async function UserLoginCommand(res: Response, body: UsersLoginBo
 
   const result = await db
     .selectFrom("users")
+    .leftJoin("user_vault", "user_vault.user_id", "users.id")
     .where("users.username", "=", body.username)
-    .selectAll()
+    .selectAll("users")
+    .select(["user_vault.salt", "user_vault.encrypted_dek"])
     .executeTakeFirst();
 
   if (!result) return fail(400, "Incorrect username or password");
-  const { password_hash, ...user } = result;
+  const { password_hash, salt, encrypted_dek, ...user } = result;
 
   const validPassword = await PasswordManager.verify(password_hash, body.password);
 
@@ -33,9 +35,9 @@ export default async function UserLoginCommand(res: Response, body: UsersLoginBo
     sessionToken,
     user.id,
     body.device_info,
-    body.public_key
+    body.public_key ?? ""
   );
   UserSessionAuth.setSessionTokenCookie(res, sessionToken, session.expires_at);
 
-  return user;
+  return { ...user, salt: salt ?? null, encrypted_dek: encrypted_dek ?? null };
 }
